@@ -22,7 +22,7 @@ const registerbatch = async (year) => {
 
 const alumniregistration = async (req, res,next) => {
     try {
-        const { username,year,gmail, password,confirmPassword } = req.body;
+        const { username,year,gmail, password,confirmPassword,expertise,currentRole,achievements } = req.body;
         // Find the batch by year
         if (password !== confirmPassword) {
             return res.status(400).send({ msg: "Password and Confirm Password do not match" });
@@ -33,6 +33,7 @@ const alumniregistration = async (req, res,next) => {
            await registerbatch(year);
            batchid = await Batchmodel.findOne({year:year});
         }
+        console.log(req.body);
         
         // Check if user already exists
         const existingUser = await usermodel.findOne({ gmail:gmail });
@@ -51,6 +52,7 @@ const alumniregistration = async (req, res,next) => {
             batch,
             gmail,
             password,
+            expertise,currentRole,achievements,
             verificationToken,
             verificationTokenExpires
 
@@ -89,8 +91,10 @@ const verifyEmail= async(req,res) => {
             gmail:tempUser.gmail,
            username:tempUser.username,
             batch:tempUser.batch,
-            
             password:tempUser.password,
+            expertise:tempUser.expertise,
+            currentRole:tempUser.currentRole
+            ,achievements:tempUser.achievements,
         });
         
 

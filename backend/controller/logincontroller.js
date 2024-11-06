@@ -66,6 +66,7 @@ const protect = async (req, res, next) => {
         if (isPasswordChanged) {
           return res.json({ msg: "Please login again" });
         }
+        requser.role=decoded.role;
         req.user = requser;
         next();
       } catch (error) {

@@ -5,6 +5,7 @@ const passwordcontroller= require("../controller/passwordcontroller");
 const logincontroller = require("../controller/logincontroller");
 const homecontroller= require("../controller/homecontroller");
 const alumniregistrationcontroller=require("../controller/alumniregistrationcontroller");
+const jobcontroller = require("../controller/jobpostcontroller");
 
 router.route("/studentregister").post(controller.studentregistration);
 //router.route("/studentregister/complete").post(controller.completestudentregister);
@@ -19,7 +20,10 @@ router.route("/resetPassword/:role/:token").patch(passwordcontroller.resetPasswo
 
 
 router.route("/updatePassword").patch(logincontroller.protect,passwordcontroller.updatePassword);
-router.route("/userdetails").get(logincontroller.protect,homecontroller.home);
+router.route("/home").get(logincontroller.protect,homecontroller.home);
+
+router.route("/postjobs").post(jobcontroller.postjobposts);
+router.route("/getjobs").post(jobcontroller.getjobposts);
 
 
 // router.route("/getbatchdetails").post(controller.getUsersByBatchYear);

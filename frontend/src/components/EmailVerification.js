@@ -31,7 +31,7 @@ const EmailVerification = () => {
         
         if (response.ok) {
           console.log("Verification successful:", data);
-          navigate("/login");
+          navigate("/alumni-login");
         } else {
           console.error("Verification failed:", data.msg);
         }

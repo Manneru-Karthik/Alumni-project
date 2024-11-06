@@ -2,6 +2,7 @@ const mongoose=require('mongoose');
 const bcrypt=require("bcryptjs")
 const jwt= require("jsonwebtoken")
 const crypto=require("crypto");
+const batch=require('./Batchmodel');
 const userSchema= new mongoose.Schema({
     gmail:{
         type:String,
@@ -22,17 +23,17 @@ const userSchema= new mongoose.Schema({
         required:[true, 'Please enter a password.'],
         minlength:8
     },
-    graduationYear:{
-      type:String,
-    },
     expertise: {
       type:String,
+      required:true,
     },
     currentRole:  {
       type:String,
+      required:true,
     },
     achievements:  {
       type:String,
+      required:true,
     },
 
     passwordChangedAt:Date,

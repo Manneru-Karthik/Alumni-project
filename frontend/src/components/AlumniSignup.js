@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from "axios";
+import "./SignupForm.css"; // Add this CSS file for common styles
 
 const AlumniSignup = () => {
   const [formData, setFormData] = useState({
@@ -7,7 +7,7 @@ const AlumniSignup = () => {
     gmail: "",
     password: "",
     year: "",
-    confirmPassword:"",
+    confirmPassword: "",
     expertise: "",
     currentRole: "",
     achievements: "",
@@ -24,27 +24,31 @@ const AlumniSignup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-
-      const {username,gmail,year,password,confirmPassword}=formData;
+      const { username, gmail, year, password, confirmPassword,expertise,currentRole,achievements } = formData;
       const response = await fetch(
-        "http://localhost:5000/alumnitracking/alumniregistration",{
-        method:"POST",
-        headers:{
-          "Content-Type":"application/json"
-        },
-        body:JSON.stringify({
-          username,year,gmail, password,confirmPassword
-        })
-        // formData
-    });
-    if(response.ok){
-      alert("Check your mail for verification");
-    }
+        "http://localhost:5000/alumnitracking/alumniregistration",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            year,
+            gmail,
+            password,
+            confirmPassword,
+            expertise,currentRole,achievements,
+            
+          }),
+        }
+      );
+      if (response.ok) {
+        alert("Check your mail for verification");
+      }
       console.log(response.data);
-      // handle success ( redirect to login page or show a success message)
     } catch (error) {
       console.error(error);
-      // handle error (e.g., show an error message)
     }
   };
 
@@ -87,12 +91,12 @@ const AlumniSignup = () => {
         <input
           type="text"
           name="year"
-          placeholder="Graduation Year"
+          placeholder="Batch ex: 2021-2025"
           value={formData.year}
           onChange={handleChange}
           required
         />
-        {/* <input
+        <input
           type="text"
           name="expertise"
           placeholder="Expertise/Experience"
@@ -114,7 +118,7 @@ const AlumniSignup = () => {
           value={formData.achievements}
           onChange={handleChange}
           required
-        /> */}
+        />
         <button type="submit">Sign Up</button>
       </form>
     </div>

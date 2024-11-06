@@ -31,7 +31,7 @@ const StudentEmailVerification = () => {
         
         if (response.ok) {
           console.log("Verification successful:", data);
-          navigate("/login");
+          navigate("/student-login");
         } else {
           console.error("Verification failed:", data.msg);
         }
