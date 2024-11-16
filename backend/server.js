@@ -4,7 +4,6 @@ const app=express();
 const mongoose=require("mongoose");
 const routes=require("./routes/route");
 const session= require('express-session');
-const MongoStore = require('connect-mongo');
 const chatroutes= require('./routes/chatRoutes');
 const messageroutes= require('./routes/messageRoutes');
 const uploadroutes= require('./routes/uploadroute');
