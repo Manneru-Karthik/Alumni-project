@@ -3,11 +3,15 @@ import AdminLogin from "./AdminLogin";
 import StudentLogin from "./StudentLogin";
 import AlumniLogin from "./AlumniLogin";
 import "./DualLogin.css";
+import Navbar from "./Navbar";
 
 const DualLogin = () => {
   const [activeForm, setActiveForm] = useState("student");
 
   return (
+    <>
+    <Navbar />
+
     <div className="dual-login-container">
       <div className="toggle-buttons">
         <button
@@ -35,6 +39,7 @@ const DualLogin = () => {
         {activeForm === "admin" && <AdminLogin />}
       </div>
     </div>
+    </>
   );
 };
 

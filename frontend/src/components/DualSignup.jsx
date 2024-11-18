@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AlumniSignup from "./AlumniSignup";
 import StudentSignup from "./StudentSignup";
 import "./DualSignup.css";
+import Navbar from "./Navbar";
 
 const DualSignup = () => {
   const [isAlumni, setIsAlumni] = useState(true);
@@ -11,6 +12,9 @@ const DualSignup = () => {
   };
 
   return (
+    <>
+    <Navbar />
+
     <div className="dual-signup-container">
       <div className="toggle-buttons">
         <button
@@ -30,6 +34,7 @@ const DualSignup = () => {
         {isAlumni ? <AlumniSignup /> : <StudentSignup />}
       </div>
     </div>
+    </>
   );
 };
 

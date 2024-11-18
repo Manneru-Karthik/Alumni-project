@@ -38,12 +38,12 @@ const Navbar2 = () => {
         <Link to="/" className="navbar-logo">
           <img src="/path-to-logo.png" alt="Logo" className="navbar-logo" />
         </Link>
-        <Link to="/" className="navbar-title">
+        <Link to="/home" className="navbar-title">
           XAlumni
         </Link>
       </div>
       <div className={`navbar-right ${isMenuOpen ? "active" : ""}`}>
-        <Link to="/" className="navbar-link">
+        <Link to="/home" className="navbar-link">
           Home
         </Link>
         <Link to="/alumni-space" className="navbar-link">
@@ -51,6 +51,9 @@ const Navbar2 = () => {
         </Link>
         <Link to="/gallery" className="navbar-link">
           Gallery
+        </Link>
+        <Link to="/" onClick={localStorage.removeItem("token")} className="navbar-link">
+          Logout
         </Link>
         <i
           className={`fas ${isDarkTheme ? "fa-sun" : "fa-moon"} theme-toggle`}

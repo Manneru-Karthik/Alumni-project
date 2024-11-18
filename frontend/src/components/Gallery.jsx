@@ -1,6 +1,8 @@
 
 import React from "react";
 import "./Gallery.css";
+import Navbar from "./Navbar";
+import Navbar2 from "./Navbar2";
 const Gallery = () => {
   const photos = [
     "/path-to-photo1.jpg",
@@ -10,6 +12,8 @@ const Gallery = () => {
   ];
 
   return (
+    <>
+    <Navbar2 />
     <div className="gallery-container">
       <h2>College Gallery</h2>
       <div className="gallery-grid">
@@ -20,6 +24,7 @@ const Gallery = () => {
         ))}
       </div>
     </div>
+    </>
   );
 };
 

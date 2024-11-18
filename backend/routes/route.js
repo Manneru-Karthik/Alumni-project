@@ -20,12 +20,13 @@ router.route("/resetPassword/:role/:token").patch(passwordcontroller.resetPasswo
 
 
 router.route("/updatePassword").patch(logincontroller.protect,passwordcontroller.updatePassword);
-router.route("/home").get(logincontroller.protect,homecontroller.home);
+//router.route("/home").get(logincontroller.protect,homecontroller.home);
 
 router.route("/postjobs").post(jobcontroller.postjobposts);
 router.route("/getjobs").post(jobcontroller.getjobposts);
 
 
+router.route("/home").post(logincontroller.protect);
 // router.route("/getbatchdetails").post(controller.getUsersByBatchYear);
 
 

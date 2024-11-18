@@ -1,74 +1,100 @@
 
 const alumnimodel=require('../models/Alumnimodel');
 const studentmodel=require('../models/Studentmodel');
+const bcrypt=require('bcryptjs')
 
-const login= async( req,res) => {
-    try{
-    const {role,gmail,password}=req.body;
-    
-    let userexist;
-    if(role==="alumni"){
-    userexist=await alumnimodel.findOne({"gmail":gmail});
-    }else{
-     userexist=  await studentmodel.findOne({"gmail":gmail});
+const login = async (req, res) => {
+  const { gmail, password, role } = req.body;
+  try {
+    // Validate input
+    if (!gmail || !password || !role) {
+      return res.status(400).json({ msg: "Please provide Gmail, Password, and Role" });
     }
-    console.log(userexist);
-    if(!userexist){
-       return res.status(401).json({msg:"Email doesnot exist"});
-    }
-    
-    const isPassword= await userexist.comparePassword(password);
-    if(isPassword){
-        const generatedToken= await userexist.generateToken(role);
-        console.log(generatedToken);
-       
-       const user={
-            id:userexist._id.toString(),
-            role:role,
-            token:generatedToken
-        };
 
-        res.status(200).json({msg:"Login successful",user,
-            token:generatedToken,
-        id:userexist._id.toString()});
-    }else{
-        res.status(400).json({msg:"Password incorrect"});
+    // Fetch user based on role
+    let user;
+    if (role === 'alumni') {
+      user = await alumnimodel.findOne({"gmail": gmail });
+    } else if (role === 'student') {
+      user = await studentmodel.findOne({"gmail": gmail });
+    } else {
+      return res.status(400).json({ msg: "Invalid role specified" });
     }
-}catch(error){
- console.error(error);
- res.status(500).json({msg:"Error occured"});
-}
 
-}
+    // Check if user exists
+    if (!user) {
+      return res.status(401).json({ msg: "Invalid credentials" });
+    }
+
+    // Compare passwords
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ msg: "Invalid credentials" });
+    }
+
+    // Generate JWT token
+    const payload = {
+      id: user._id,
+      role: role,
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+
+    res.json({
+      msg: "Login successful",
+      token,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Server error" });
+  }
+};
+
 
 const jwt = require('jsonwebtoken');
 
 
 const protect = async (req, res, next) => {
     try {
-        const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
-    
-        if (!token) {
-          return res.status(401).json({ msg: "No token found, authorization denied" });
-        }
-      
-        const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        let requser;
-        if (decoded.role === 'alumni') {
-          requser = await alumnimodel.findById(decoded.id).select('-password');
-        } else {
-          requser = await studentmodel.findById(decoded.id).select('-password');
-        }
-        if (!requser) {
-          return res.json({ msg: "User with the token does not exist" });
-        }
-        const isPasswordChanged = await requser.isPasswordChanged(decoded.iat);
-        if (isPasswordChanged) {
-          return res.json({ msg: "Please login again" });
-        }
-        requser.role=decoded.role;
-        req.user = requser;
-        next();
+      const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+      if (!token) {
+        return res.status(401).json({ msg: 'No token provided, authorization denied' });
+      }
+  
+      // Verify token
+      const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+  
+      const role=decoded.role;
+      const id=decoded.id;
+      // Fetch user based on role
+      let requser;
+      if (role === 'alumni') {
+        requser = await alumnimodel.findById(id);
+      } else if (role === 'student') {
+        requser = await studentmodel.findById(id);
+      } else {
+        return res.status(400).json({ msg: "Invalid role specified" });
+      }
+  
+      // If user not found
+      if (!requser) {
+        return res.status(401).json({ msg: "Invalid credentials" });
+      }
+  
+      // Compare passwords
+  
+      // Check if password was changed after token issued
+      const isPasswordChanged = await requser.isPasswordChanged(req.body.tokenIat); // Pass the token issued at time
+      if (isPasswordChanged) {
+        return res.status(401).json({ msg: "Password changed recently. Please login again." });
+      }
+   
+      // Attach user to request object
+      req.user = requser;
+      res.json({
+        msg: "Login successful",
+        token,
+      });
       } catch (error) {
         console.error(error);
         res.status(401).json({ msg: "Token is not valid" });
