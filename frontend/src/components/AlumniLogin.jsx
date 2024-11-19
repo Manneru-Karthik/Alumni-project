@@ -38,9 +38,7 @@ const AlumniLogin = () => {
         }
       );
       const responsedata = await response.json();
-      localStorage.setItem("token", responsedata.token);
-
-      console.log(responsedata.token);
+      sessionStorage.setItem("token",responsedata.token);
       // Redirect to home page
       navigate("/home");
     } catch (err) {

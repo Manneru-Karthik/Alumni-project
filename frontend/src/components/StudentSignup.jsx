@@ -8,8 +8,7 @@ const StudentSignup = () => {
     usn: "",
     password: "",
     confirmPassword: "",
-    currentYear: "",
-    role: "student",
+    currentYear: ""
   });
 
   const handleChange = (e) => {
@@ -26,7 +25,7 @@ const StudentSignup = () => {
       const { username, gmail, usn, password, confirmPassword, currentYear } =
         formData;
       const response = await fetch(
-        "http://localhost:5000/alumnitracking/studentregister",
+        "http://localhost:5000/alumnitracking/studentregistration",
         {
           method: "POST",
           headers: {

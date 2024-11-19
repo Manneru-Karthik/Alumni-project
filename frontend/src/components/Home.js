@@ -50,11 +50,11 @@ const Home = () => {
   
     useEffect(() => {
       const fetchData = async () => {
-        const token = localStorage.getItem("token"); // Retrieve token from localStorage
-  
+        const token = sessionStorage.getItem("token"); // Retrieve token from localStorage
+        
         try {
           const response = await fetch("http://localhost:5000/alumnitracking/home", {
-            method: "POST",
+            method: "GET",
             headers: {
               "Authorization": `Bearer ${token}`,
               "Content-Type": "application/json",
@@ -66,6 +66,7 @@ const Home = () => {
           }
   
           const result = await response.json(); // Parse the JSON response
+          console.log(result);
           setData(result); // Save the result in the state
         } catch (error) {
           console.error("Error fetching data:", error.message);
@@ -81,16 +82,14 @@ const Home = () => {
       <>
         <Navbar2 />
         <div>
-          <h1>Home Page</h1>
-          {/* Display a loading message or fetched data */}
-          {loading ? (
-            <p>Loading...</p>
-          ) : data ? (
-            <p>{data.msg}</p> // Access the `msg` property from the fetched data
-          ) : (
-            <p>No data available</p>
-          )}
-        </div>
+  <p>Welcome</p>
+  {data && data.user && data.user.username && (
+    <h3 style={{ marginTop: "10px" }}>
+      Hello, <strong>{data.user.username}</strong>!
+    </h3>
+  )}
+</div>
+
   
         <Banner />
         <About />

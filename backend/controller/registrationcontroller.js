@@ -3,7 +3,7 @@ const {sendmail} = require('./mailcontroller.js');
 const crypto=require('crypto');
 const Batchmodel = require('../models/Batchmodel');
 const jwt= require('jsonwebtoken');
-const tempUser={};
+
 const registerbatch = async (year) => {
     try{
      await Batchmodel.create({
@@ -64,7 +64,7 @@ const studentregistration = async (req, res,next) => {
         const subject="Email verification";
         const text = `Dear ${username}, please verify your email by clicking on the following link: ${verificationLink}. The link will expire in 5 minutes.`;
 
-        sendmail(gmail,subject,text);
+       await sendmail(gmail,subject,text);
        return res.status(200).send({ msg: "Verification code sent. Please verify your email."});
         // Create new user
   
@@ -86,20 +86,19 @@ const verifyEmail= async(req,res) => {
         }
         console.log(tempUser);
 
-        const usercreated = new user({
+        const usercreated = await user.create({
            username:tempUser.username,
             batch:tempUser.batch,
             usn:tempUser.usn,
             gmail:tempUser.gmail,
             password:tempUser.password,
         });
-        await usercreated.save();
         let subject="Successfully registered";
         let text=`Dear ${tempUser.username}, u are successfully registered as student with alumni website`
-        sendmail(tempUser.gmail,subject,text);
+       await sendmail(tempUser.gmail,subject,text);
         
          console.log("Student registered");
-        return res.status(200).send({ msg: usercreated });
+        return res.status(200).send({ msg: "Email verified and registration completed successfully" });
         
     } catch (error) {
         console.error(error);

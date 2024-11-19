@@ -39,7 +39,6 @@ const AlumniSignup = () => {
             password,
             confirmPassword,
             expertise,currentRole,achievements,
-            
           }),
         }
       );

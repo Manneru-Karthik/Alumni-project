@@ -37,14 +37,9 @@ const StudentLogin = () => {
         }
       );
       const responsedata = await response.json();
-      
-
-      const userData = responsedata.user;
-      console.log("User data:", userData);
-
-      localStorage.setItem("user", JSON.stringify(userData));
-
-      navigate("/afterlogin");
+      sessionStorage.setItem("token",responsedata.token);
+      // Redirect to home page
+      navigate("/home");
     } catch (err) {
       console.log(err);
     }

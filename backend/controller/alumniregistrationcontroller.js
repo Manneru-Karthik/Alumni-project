@@ -4,7 +4,6 @@ const crypto=require('crypto');
 const Batchmodel = require('../models/Batchmodel');
 const jwt=require('jsonwebtoken');
 
-let tempUser={};
 
 const registerbatch = async (year) => {
     try{

@@ -42,7 +42,7 @@ const login = async (req, res) => {
 
     res.json({
       msg: "Login successful",
-      token,
+      token
     });
   } catch (error) {
     console.error(error);
@@ -75,7 +75,7 @@ const protect = async (req, res, next) => {
       } else {
         return res.status(400).json({ msg: "Invalid role specified" });
       }
-  
+      console.log(requser);
       // If user not found
       if (!requser) {
         return res.status(401).json({ msg: "Invalid credentials" });
@@ -91,10 +91,9 @@ const protect = async (req, res, next) => {
    
       // Attach user to request object
       req.user = requser;
-      res.json({
-        msg: "Login successful",
-        token,
-      });
+
+      // Pass to the next middleware/route handler
+      next();
       } catch (error) {
         console.error(error);
         res.status(401).json({ msg: "Token is not valid" });
