@@ -7,41 +7,6 @@ import Team from "./Team";
 import axios from 'axios';
 import Navbar2 from "./Navbar2";
 const Home = () => {
-  //const [userDetails, setUserDetails] = useState(null);
-
-  // useEffect(() => {
-  //   const fetchUserDetails = async () => {
-  //     const user = JSON.parse(localStorage.getItem('user'));
-  //     if (user && user.token) {
-  //       try {
-  //         const response = await fetch("http://localhost:5000/alumnitracking/home", {
-  //           method: "GET",
-  //           headers: {
-  //             "Authorization": `Bearer ${user.token}`,
-  //             "Content-Type": "application/json"
-  //           }
-  //         });
-
-  //         if (!response.ok) {
-  //           throw new Error("Failed to fetch user details");
-  //         }
-
-  //         const data = await response.json();
-  //         localStorage.setItem("userdetails",data.user);
-  //         setUserDetails(data.user);
-  //       } catch (err) {
-  //         console.error(err);
-  //       }
-  //     }
-  //   };
-
-  //   fetchUserDetails();
-  // }, []);
-
-
-  // if (!userDetails) {
-  //   return <div>Loading...</div>;
-  // }   http://localhost:5000/home
 
 
 
@@ -64,9 +29,11 @@ const Home = () => {
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
-  
           const result = await response.json(); // Parse the JSON response
           console.log(result);
+          sessionStorage.setItem("user", JSON.stringify(result.user));
+
+          // Retrieve and parse it back to an object
           setData(result); // Save the result in the state
         } catch (error) {
           console.error("Error fetching data:", error.message);

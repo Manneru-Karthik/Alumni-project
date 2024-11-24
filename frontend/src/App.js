@@ -1,7 +1,7 @@
 import ProtectedRoute from "./ProtectedRoute";
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Route, Routes, useSearchParams } from "react-router-dom";
-import Navbar from "./components/Navbar";
+
 import Home from "./components/Home";
 import AlumniSpace from "./components/AlumniSpace";
 import Gallery from "./components/Gallery";
@@ -18,7 +18,9 @@ import StudentLogin from "./components/StudentLogin";
 import "./App.css"; // Import the App.css file
 import EmailVerification from "./components/EmailVerification";
 import StudentEmailVerification from "./components/StudentEmailVerification";
-import Navbar2 from "./components/Navbar2";
+
+import AdminSignup from "./components/AdminSignup";
+import AdminHome from "./components/AdminHome";
 
 const App = () => {
   // const { isLoggedIn, setIsLoggedIn } = useState(false);
@@ -39,17 +41,22 @@ const App = () => {
         <div className="content">
           <Routes>
           <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} /> 
-            <Route path="/dual-signup" element={<DualSignup />} />
-            <Route path="/alumni-login" element={<Login />} />
-            <Route path="/student-login" element={<StudentLogin />} />
-            <Route path="/admin-login" element={<AdminLogin />} />
-            <Route path="/alumni-space" element={<AlumniSpace />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/jobs" element={<Jobs />} />
-            <Route path="/create-job" element={<CreateJob />} />
-            <Route path="/events" element={<Events />} />
-            <Route path="/create-event" element={<CreateEvent />} />
+            <Route path="/dual-signup" element={<DualSignup /> } />
+            <Route path="/alumni-login" element={<Login /> } />
+            <Route path="/student-login" element={<StudentLogin /> } />
+            <Route path="/admin-login" element={<AdminLogin /> } />
+            
+            <Route path="/adminhome" element={<ProtectedRoute><AdminHome /> </ProtectedRoute>} />
+            
+
+            <Route path="/alumni-space" element={<ProtectedRoute><AlumniSpace /> </ProtectedRoute>} />
+            <Route path="/gallery" element={<ProtectedRoute><Gallery /></ProtectedRoute>} />
+            <Route path="/jobs" element={<ProtectedRoute><Jobs /></ProtectedRoute>} />
+            <Route path="/create-job" element={<ProtectedRoute><CreateJob /> </ProtectedRoute>} />
+            <Route path="/events" element={<ProtectedRoute><Events /> </ProtectedRoute>} />
+            <Route path="/create-event" element={<ProtectedRoute><CreateEvent /> </ProtectedRoute>} />
             <Route path="/" element={<DualLogin />} />
+            <Route path="/adminsignup" element={<AdminSignup /> } />
              {/*<Route path="/alumni-home" element={<Home/>} />  */}
             <Route path="/verify-email" element={<EmailVerification/>}/>
             <Route path="/verifystudentemail" element={<StudentEmailVerification/>}/>

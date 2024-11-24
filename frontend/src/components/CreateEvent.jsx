@@ -7,39 +7,71 @@ const CreateEvent = () => {
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    Image: "",
     date: "",
     time: "",
     isOnline: false,
     location: "",
   });
 
+  const [eventImage, setEventImage] = useState(null);
+  const [error, setError] = useState("");
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? checked : value, // Cast checkbox value to boolean
     });
+  };
+
+  const handleImageChange = (e) => {
+    setEventImage(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!eventImage) {
+      setError("Event image is required.");
+      return;
+    }
+
+    const user = JSON.parse(sessionStorage.getItem("user"));
+
+    const data = new FormData();
+    data.append("title", formData.title);
+    data.append("description", formData.description);
+    data.append("date", formData.date);
+    data.append("time", formData.time);
+    data.append("isOnline", formData.isOnline); // Append as boolean
+    if (!formData.isOnline) {
+      data.append("location", formData.location);
+    }
+    data.append("eventImage", eventImage);
+    data.append(
+      "postedBy",
+      JSON.stringify({
+        userId: user._id,
+        username: user.username,
+        email: user.gmail,
+      })
+    );
+
     try {
-      const response = await fetch("http://localhost:5000/events", {
+      const response = await fetch("http://localhost:5000/alumnitracking/postevents", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+        body: data,
       });
 
       if (response.ok) {
         navigate("/events");
       } else {
         console.error("Failed to create event");
+        setError("Failed to create event. Please try again.");
       }
     } catch (error) {
       console.error("Error creating event:", error);
+      setError("An error occurred. Please try again.");
     }
   };
 
@@ -47,6 +79,7 @@ const CreateEvent = () => {
     <div className="create-event-page">
       <form onSubmit={handleSubmit}>
         <h2>Create Event</h2>
+        {error && <p className="error-message">{error}</p>}
         <label>
           Title:
           <input
@@ -67,12 +100,12 @@ const CreateEvent = () => {
           />
         </label>
         <label>
-          Image URL:
+          Event Image:
           <input
-            type="text"
-            name="Image"
-            value={formData.Image}
-            onChange={handleChange}
+            type="file"
+            name="eventImage"
+            accept="image/*"
+            onChange={handleImageChange}
             required
           />
         </label>

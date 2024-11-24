@@ -1,4 +1,3 @@
-// src/components/CreateJob.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./CreateJob.css";
@@ -8,12 +7,14 @@ const CreateJob = () => {
   const [formData, setFormData] = useState({
     title: "",
     company: "",
-    companyImage: "",
+    jobUrl: "",
     location: "",
     description: "",
     qualification: "",
     applicationDeadline: "",
   });
+
+  const [companyImage, setCompanyImage] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,15 +24,38 @@ const CreateJob = () => {
     });
   };
 
+  const handleImageChange = (e) => {
+    setCompanyImage(e.target.files[0]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const user = JSON.parse(sessionStorage.getItem("user"));
+
+    const data = new FormData();
+    data.append("title", formData.title);
+    data.append("company", formData.company);
+    data.append("jobUrl", formData.jobUrl);
+    data.append("location", formData.location);
+    data.append("description", formData.description);
+    data.append("qualification", formData.qualification);
+    data.append("applicationDeadline", formData.applicationDeadline);
+
+    if (companyImage) {
+      data.append("companyImage", companyImage);
+    }
+
+    // Ensure postedBy contains correct user information
+    data.append("postedBy", JSON.stringify({
+      userId: user._id, 
+      username: user.username, 
+      email: user.gmail
+    }));
+
     try {
       const response = await fetch("http://localhost:5000/alumnitracking/postjobs", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+        body: data, // No need to set Content-Type with FormData
       });
 
       if (response.ok) {
@@ -43,6 +67,10 @@ const CreateJob = () => {
       console.error("Error creating job:", err);
     }
   };
+
+  
+
+
 
   return (
     <div className="create-job-page">
@@ -69,13 +97,22 @@ const CreateJob = () => {
           />
         </label>
         <label>
-          Company Image URL:
+          Job URL:
           <input
             type="text"
-            name="companyImage"
-            value={formData.companyImage}
+            name="jobUrl"
+            value={formData.jobUrl}
             onChange={handleChange}
             required
+          />
+        </label>
+        <label>
+          Company Image:
+          <input
+            type="file"
+            name="companyImage"
+            accept="image/*"
+            onChange={handleImageChange}
           />
         </label>
         <label>

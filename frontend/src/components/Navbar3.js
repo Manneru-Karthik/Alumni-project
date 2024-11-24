@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 
-const Navbar2 = () => {
+const Navbar3 = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
 
@@ -31,7 +31,6 @@ const Navbar2 = () => {
       localStorage.setItem("theme", "dark");
     }
   };
-  const role = sessionStorage.getItem("role");
 
   return (
     <nav className="navbar">
@@ -39,20 +38,14 @@ const Navbar2 = () => {
         <Link to="/" className="navbar-logo">
           <img src="/path-to-logo.png" alt="Logo" className="navbar-logo" />
         </Link>
-        <Link to="/home" className="navbar-title">
+        <Link to="/adminhome" className="navbar-title">
           XAlumni
         </Link>
       </div>
       <div className={`navbar-right ${isMenuOpen ? "active" : ""}`}>
-      {role === "admin" ? (
-          <Link to="/adminhome" className="navbar-link">
-            Home
-          </Link>
-        ) : (
-          <Link to="/home" className="navbar-link">
-            Home
-          </Link>
-        )}
+        <Link to="/adminhome" className="navbar-link">
+          Home
+        </Link>
         <Link to="/alumni-space" className="navbar-link">
           Alumni Space
         </Link>
@@ -64,7 +57,6 @@ const Navbar2 = () => {
   onClick={() => {
     sessionStorage.removeItem("token");
     sessionStorage.removeItem("user");
-    sessionStorage.removeItem("role");
   }} 
   className="navbar-link"
 >
@@ -89,4 +81,4 @@ const Navbar2 = () => {
   );
 };
 
-export default Navbar2;
+export default Navbar3;

@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import "./Login.css";
+import "./SignupForm.css"; // Ensure you have a CSS file for styles
 
-const AdminLogin = () => {
-  const navigate = useNavigate();
+  import { useNavigate } from "react-router-dom";
+
+
+const AdminSignup = () => {
+    const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    role: "admin",
     username: "",
     password: "",
   });
-  
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,9 +22,9 @@ const AdminLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const { username, password, role } = formData;
+      const { username, password } = formData;
       const response = await fetch(
-        "http://localhost:5000/alumnitracking/admin/login",
+        "http://localhost:5000/alumnitracking/admin/signup",
         {
           method: "POST",
           headers: {
@@ -34,24 +33,25 @@ const AdminLogin = () => {
           body: JSON.stringify({
             username,
             password,
-            role,
           }),
         }
       );
-      const responsedata = await response.json();
-      sessionStorage.setItem("token",responsedata.token);
-      sessionStorage.setItem("role","admin");
-
-      navigate("/adminhome");
-    } catch (err) {
-      console.log(err);
+      if (response.ok) {
+        alert("Admin account created successfully. You can now log in.");
+      } else {
+        const errorData = await response.json();
+        alert(`Signup failed: ${errorData.message || "Unknown error"}`);
+      }
+    } catch (error) {
+      console.error("Error during signup:", error);
+      alert("An error occurred during signup. Please try again later.");
     }
   };
 
   return (
-    <div className="login-container">
+    <div className="signup-container">
       <form onSubmit={handleSubmit}>
-        <h2>Admin Login</h2>
+        <h2>Admin Sign Up</h2>
         <input
           type="text"
           name="username"
@@ -68,14 +68,12 @@ const AdminLogin = () => {
           onChange={handleChange}
           required
         />
-        <input type="hidden" name="role" value="admin" />
+        <button onClick={() => navigate("/admin-login")}>Sign In</button>
 
-        <button onClick={() => navigate("/adminsignup")}>Sign Up</button>
-
-        <button type="submit">Login</button>
+        <button type="submit">Sign Up</button>
       </form>
     </div>
   );
 };
 
-export default AdminLogin;
+export default AdminSignup;

@@ -7,10 +7,13 @@ import jobs from "../assets/jobs.jpg";
 import events from "../assets/events.jpg";
 import Navbar2 from "./Navbar2";
 
+
+
 const AlumniSpace = () => {
+
   return (
     <>
-      <Navbar2 />
+  <Navbar2 />
       <div className="dashboard-section">
         <h2>Job Opportunities</h2>
         <img src={jobs} alt="job photo" />

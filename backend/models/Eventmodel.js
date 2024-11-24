@@ -1,49 +1,33 @@
 const mongoose = require('mongoose');
-const Schema= mongoose.Schema;
-const alumnimodel= require('../models/Alumnimodel');
+const Schema = mongoose.Schema;
 
-const eventSchema=new Schema({
-    title:{
-        type:String,
-        required:true,
-    },
-    description:{
-        type:String,
-        required:true,
-    },
-    Image:{
-        type:String,
-        required:true,
-    },
-    date:{
-        type:Date,
-        required:true,
-    },
-    time:{
-        type:String,
-        required:true,
-    },
-    isOnline:{
-        type:Boolean,
-        required:true,
-    },
-    creationDate:{
-        type:Date,
-        default:Date.now(),
-    },
-    location:{
-        type:String,
-        required: function(){
-            return !this.isOnline;
+const eventSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    date: { type: Date, required: true },
+    isOnline: { type: Boolean, required: true },
+    location: { 
+      type: String, 
+      validate: {
+        validator: function(value) {
+          // Only validate 'location' if the event is offline
+          if (!this.isOnline) {
+            return value && value.trim().length > 0;
+          }
+          return true;
         },
+        message: 'Location is required for offline events',
+      },
+      default: null
     },
-    creator:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "alumnimodel",
-        required: true,
-
+    eventImage: {
+      data: Buffer,
+      contentType: String,
     },
-});
-
-const Event = mongoose.model('Event', eventSchema);
-module.exports=Event;
+    postedBy: {
+      userId: { type: mongoose.Schema.Types.ObjectId, required: true },
+      username: { type: String, required: true },
+      email: { type: String, required: true },
+    },
+  });
+module.exports = mongoose.model("Event", eventSchema);
