@@ -52,9 +52,11 @@ const Events = () => {
           <button className="go-back-btn" onClick={() => navigate('/alumni-space')}>
             Go Back
           </button>
-          <Link to="/create-event" className="create-event-btn">
-            Create Event
-          </Link>
+          {sessionStorage.getItem('role') !== 'student' && (
+  <Link to="/create-event" className="create-event-btn">
+    Create Event
+  </Link>
+          )}
         </div>
       </div>
       <div className="event-container">

@@ -38,6 +38,10 @@ const AdminLogin = () => {
           }),
         }
       );
+      if (response.status === 401) {
+        alert("Password is incorrect. Please try again.");
+        return;
+      }
       const responsedata = await response.json();
       sessionStorage.setItem("token",responsedata.token);
       sessionStorage.setItem("role","admin");

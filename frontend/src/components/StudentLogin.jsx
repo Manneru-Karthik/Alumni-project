@@ -9,7 +9,7 @@ const StudentLogin = () => {
     gmail: "",
     password: "",
   });
-
+  const [errorMessage, setErrorMessage] = useState("");
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -20,6 +20,7 @@ const StudentLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage("");
     try {
       const { gmail, password, role } = formData;
       const response = await fetch(
@@ -36,8 +37,13 @@ const StudentLogin = () => {
           }),
         }
       );
+      if (response.status === 401) {
+        alert("Password is incorrect. Please try again.");
+        return;
+      }
       const responsedata = await response.json();
       sessionStorage.setItem("token",responsedata.token);
+      sessionStorage.setItem("role","student");
       // Redirect to home page
       navigate("/home");
     } catch (err) {

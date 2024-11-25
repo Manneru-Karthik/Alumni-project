@@ -35,9 +35,11 @@ const JobList = () => {
           <button className="go-back-btn" onClick={() => navigate("/alumni-space")}>
             Go Back
           </button>
-          <Link to="/create-job" className="create-job-btn">
-            Create Job
-          </Link>
+          {sessionStorage.getItem('role') !== 'student' && (
+  <Link to="/create-job" className="create-job-btn">
+    Create Job
+  </Link>
+)}
         </div>
       </div>
       <div className="job-container">
